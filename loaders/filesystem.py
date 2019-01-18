@@ -30,7 +30,10 @@ def FindSSFile(filename, listmode=False):
 
     Returns:
     	A string with the absolute path for a file.
-    	If listmode is True, returns a list of files instead.
+    	If no file was found, returns None,
+
+    	If listmode is True, returns a list of files instead. Still returns
+    	None if no file was found.
 
     """
     files = []
