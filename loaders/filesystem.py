@@ -60,8 +60,8 @@ def ObjectsFromJsonFile(filename='.json'):
     	filename: a string with the full or partial file's name
 
     Yields:
-    	A python object representing each json object inside the file named
-    	filename.
+    	An iterable where each item represents each json object inside the file
+    	named filename.
     """
     for filepath in FindSSFile(filename, listmode=True):
         with open(filepath, 'r') as datafile:
