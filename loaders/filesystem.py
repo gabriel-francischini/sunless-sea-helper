@@ -69,6 +69,9 @@ def ObjectsFromJsonFile(filename='.json'):
             json_object = json.loads(rawdata)
             del rawdata
             try:
+                # Dicts are iterable, but it doesn't do what we expect
+                if type(json_object) == type(dict()):
+                    raise TypeError
                 for i in json_object:
                     yield i
             except TypeError:
