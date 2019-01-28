@@ -49,7 +49,7 @@ class CategoryMatcher:
                     matched = True
                     break
             if not matched:
-                self.children[key].append(CategoryMatcher(value, name=key))
+                self.children[key].append(CategoryMatcher(value, name=self.name+'-'+key))
         elif type(value) == list and set(map(type, value)) == set([dict]):
             for v in value:
                 matched = False
@@ -58,7 +58,7 @@ class CategoryMatcher:
                         matched = True
                         break
                 if not matched:
-                    self.children[key].append(CategoryMatcher(v, name=key))
+                    self.children[key].append(CategoryMatcher(v, name=self.name+'-'+key))
 
 
     def matches(self, obj):
@@ -91,7 +91,7 @@ class CategoryMatcher:
             if self.fields[key] == type(None) and value != type(None):
                 self.fields[key] = value
                 if type(value) == dict:
-                    self.children[key] = [CategoryMatcher(value, name=key)]
+                    self.children[key] = [CategoryMatcher(value, name=self.name+'-'+key)]
 
             if key not in self.fields:
                 self.fields[key] = value
