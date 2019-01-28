@@ -156,16 +156,26 @@ class CategoryMatcher:
         return self.__str__()
 
 matchers = []
+real_data = []
 
 for filepath in loaders.FindSSFile('.json', listmode=True):
     filename = os.path.split(filepath)[-1]
-    if filename in ["config.json"]:
+    if filename in ["config.json", "preferences.json"]:
         continue
-#    print(filename)
+    if 'disabled' in filepath:
+        continue
+    if 'addon' in filepath:
+        continue
+    if 'constant' in filepath:
+        continue
+    if 'save' in filepath:
+        continue
 
-    for obj in loaders.ObjectsFromJsonFile(filename):
+
+    for obj in loaders.ObjectsFromJsonFile(filepath):
         if not any(map(lambda matcher: matcher.matches(obj), matchers)):
             matchers.append(CategoryMatcher(obj, name=filename))
+        real_data.append(obj)
 
 json_metadata = "[{}]".format(", ".join([str(x) for x in matchers]))
 
