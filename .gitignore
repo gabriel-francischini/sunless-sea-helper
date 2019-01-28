@@ -1,7 +1,14 @@
 .idea/*
 *.xml
 *.pdf
+*.aux
+*.toc
 
+
+# Ignore any .tex temps folders
+pdfs/*
+pdf/*
+temp/*
 
 # Python Template from https://github.com/github/gitignore
 
