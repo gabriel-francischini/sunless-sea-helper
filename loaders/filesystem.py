@@ -60,16 +60,24 @@ def FindSSFile(filename, listmode=False):
             return None
 
 def ObjectsFromJsonFile(filename='.json'):
-    """Yields objects readed from file named filename inside Sunless Sea folders
+    """Returns JSON objects from files matching filename inside Sunless Sea folders
 
     Args:
-    	filename: a string with the full or partial file's name
+    	filename: a string with the file's name. If this is a filepath, open that
+    	file, else open files whose filename matches fully or partially this string.
 
     Yields:
-    	An iterable where each item represents each json object inside the file
-    	named filename.
+    	An iterable where each item represents each json object inside the file(s)
+    	whose name matches filename.
     """
-    for filepath in FindSSFile(filename, listmode=True):
+    filepaths = []
+    if sunless_sea_folder in filename and os.path.isfile(filename):
+        filepaths.append(filename)
+    else:
+        for filepath in FindSSFile(filename, listmode=True):
+            filepaths.append(filepath)
+
+    for filepath in filepaths:
         with open(filepath, 'r') as datafile:
             rawdata = datafile.read()
             json_object = json.loads(rawdata)
