@@ -22,6 +22,10 @@ def FindSSFile(filename, listmode=False):
     filename. If listmode is true, returns a list of files matching the supplied
     filename instead.
 
+    If there is more than one file named filename, files closer to the Sunless Sea
+    root directory (i.e. file that aren't in deeply nested folders) will be given
+    preference.
+
     Args:
         filename: a string with the file's name. Don't need to be the full
     		file's name.
@@ -41,6 +45,8 @@ def FindSSFile(filename, listmode=False):
         for i in filenames:
             if filename in i:
                 files.append(os.path.join(dirpath, i))
+
+    files.sort(key=lambda x: sum([1 if c == '/' else 0 for c in x]))
 
     if listmode:
         if len(files) > 0:
