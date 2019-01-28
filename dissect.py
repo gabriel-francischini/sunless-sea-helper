@@ -270,3 +270,59 @@ if not show_extra_data and flattened_output:
     # for patt, qtd in patts.items():
     #     if qtd > 2:
     #         print("{}: {}").format(qtd, patt)
+
+def flatten(obj):
+    simpletypes = [float, int, str, type(None)]
+    if type(obj) in simpletypes:
+        return []
+    if type(obj) == list:
+        result = []
+        [result.extend(flatten(i)) for i in obj]
+        return result
+    if type(obj) == dict:
+        result = []
+        to_remove = []
+        for key, value in obj.items():
+            if type(value) not in simpletypes:
+                result.extend(flatten(value))
+                to_remove.append(key)
+        my_obj = {}
+        for key, value in obj.items():
+            if key not in to_remove:
+                my_obj[key] = value
+        result.append(my_obj)
+        return result
+
+    return []
+
+if show_extra_data and flattened_output:
+    x = flatten(real_data)
+    hist = {}
+
+    for obj in x:
+        for key, value in obj.items():
+            value = str(value)
+            hist[key] = hist.get(key, {})
+            hist[key][value] = hist[key].get(value, 0) + 1
+
+
+    for field, h in hist.items():
+        to_remove = []
+        for value, qtd in h.items():
+            #print((qtd, value))
+            if qtd <= 1:
+                to_remove.append(value)
+
+        for value in to_remove:
+            del h[value]
+
+    for field, h in hist.items():
+        swapped_h = {}
+        for key, qtd in h.items():
+            str_qtd = "{:06}".format(qtd)
+            swapped_h[str_qtd] = key
+        hist[field] = swapped_h
+
+    print(json.dumps(hist, indent=4, sort_keys=True))
+
+    #print(json.dumps(x, indent=4, sort_keys=True))
